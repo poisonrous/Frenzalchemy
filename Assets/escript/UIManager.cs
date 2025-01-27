@@ -122,13 +122,14 @@ public class UIManager : MonoBehaviour
         }
 
         // Inicializa las cantidades de piedras desde managervariables
-        cantidadPiedra = new int[5];
-        cantidadPiedra[0] = managervariables.cantidadpiedraazul;
-        cantidadPiedra[1] = managervariables.cantidadpiedraroja;
-        cantidadPiedra[2] = managervariables.cantidadpiedraverde;
-        cantidadPiedra[3] = managervariables.cantidadpiedrablanca;
-        cantidadPiedra[4] = managervariables.cantidadpiedragris;
-
+        if(cantidadPiedra==null){
+            cantidadPiedra = new int[5];
+            cantidadPiedra[0] = managervariables.cantidadpiedraazul;
+            cantidadPiedra[1] = managervariables.cantidadpiedraroja;
+            cantidadPiedra[2] = managervariables.cantidadpiedraverde;
+            cantidadPiedra[3] = managervariables.cantidadpiedrablanca;
+            cantidadPiedra[4] = managervariables.cantidadpiedragris;
+        }
         // Inicializa las cantidades restadas
         cantidadRestada = new int[5];
 
@@ -200,7 +201,7 @@ public class UIManager : MonoBehaviour
             ActualizarUI();
         }
 
-        void RestarPiedra()
+         void RestarPiedra()
         {
             if (cantidadPiedra[indicePiedraActual] > 0)
             {
@@ -208,6 +209,9 @@ public class UIManager : MonoBehaviour
                 cantidadRestada[indicePiedraActual]++;
                 ActualizarUI();
                 ActualizarListaRestadas();
+
+                // Actualizar managervariables
+                ActualizarCantidadPiedraEnManagerVariables();
             }
             else
             {
@@ -216,6 +220,16 @@ public class UIManager : MonoBehaviour
                 StartCoroutine(MostrarMensaje("No hay suficientes piedras para agregar.", textonohaypararestar));
             }
         }
+
+        void ActualizarCantidadPiedraEnManagerVariables()
+        {
+            managervariables.cantidadpiedraazul = cantidadPiedra[0];
+            managervariables.cantidadpiedraroja = cantidadPiedra[1];
+            managervariables.cantidadpiedraverde = cantidadPiedra[2];
+            managervariables.cantidadpiedrablanca = cantidadPiedra[3];
+            managervariables.cantidadpiedragris = cantidadPiedra[4];
+        }
+
 
         void MezclarPiedras()
         {
@@ -366,6 +380,22 @@ public class UIManager : MonoBehaviour
         yield return new WaitForSeconds(1f); // Espera 2 segundos
         texto.text = "";
     }
+    public void RestarMezcla(string tipo)
+{
+    switch (tipo)
+    {
+        case "Buena":
+            if (cantidadMezclasBuena > 0) cantidadMezclasBuena--;
+            break;
+        case "Media":
+            if (cantidadMezclasMedia > 0) cantidadMezclasMedia--;
+            break;
+        case "Mala":
+            if (cantidadMezclasMala > 0) cantidadMezclasMala--;
+            break;
+    }
+    ActualizarMezclas();
+}
 }
 
 
