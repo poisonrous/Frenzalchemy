@@ -5,13 +5,14 @@ public class Draggable : MonoBehaviour
     private Collider2D col;
     private Vector3 startDragPosition;
     private Inventory inventory; // Referencia al inventario
-    private UIManager uiManager; // Referencia a UIManager
+    public string tipoMezcla; // Propiedad para almacenar el tipo de mezcla
 
     private void Start()
     {
         col = GetComponent<Collider2D>();
         inventory = FindObjectOfType<Inventory>(); // Encontrar el inventario en la escena
-        uiManager = FindObjectOfType<UIManager>(); // Encontrar UIManager en la escena
+        tipoMezcla = gameObject.name.Replace("Mezcla ", ""); // Asignar el tipo de mezcla basado en el nombre del GameObject
+        Debug.Log("Tipo de mezcla asignado en Draggable: " + tipoMezcla); // Añade este log para verificar
     }
 
     private void OnMouseDown()
@@ -32,16 +33,8 @@ public class Draggable : MonoBehaviour
         col.enabled = true;
         if (hitCollider != null && hitCollider.TryGetComponent(out IDropArea dropArea))
         {
+            Debug.Log("Draggable: Tipo de mezcla antes de OnDrop: " + tipoMezcla); // Añade este log para verificar
             dropArea.OnDrop(this);
-            string tipoMezcla = gameObject.name.Replace("Mezcla ", ""); // Suponiendo que el nombre del GameObject sea "Mezcla Buena", "Mezcla Media", "Mezcla Mala"
-            if (uiManager != null)
-            {
-                uiManager.RestarMezcla(tipoMezcla); // Llama al método no estático
-            }
-            else
-            {
-                Debug.LogError("No se encontró la instancia de UIManager.");
-            }
         }
         else
         {
