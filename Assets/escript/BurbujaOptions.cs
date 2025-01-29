@@ -11,6 +11,19 @@ public class BurbujaOptions : MonoBehaviour
     private bool isStopped = false; // Indica si la burbuja ha sido detenida
     private string tipoMezcla; // Tipo de mezcla
 
+    void Start()
+    {
+        // Ajustar las propiedades del RectTransform
+        RectTransform rectTransform = GetComponent<RectTransform>();
+        if (rectTransform != null)
+        {
+            rectTransform.localScale = Vector3.one * 100;
+            rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
+            rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
+            rectTransform.pivot = new Vector2(0.5f, 0.5f);
+        }
+    }
+
     void Update()
     {
         if (isStopped)
@@ -22,7 +35,7 @@ public class BurbujaOptions : MonoBehaviour
         if (isInflating)
         {
             // Incrementar el tamaño de la burbuja
-            transform.localScale += new Vector3(inflateRate, inflateRate, 0) * Time.deltaTime;
+            transform.localScale += new Vector3(inflateRate, inflateRate, inflateRate) * Time.deltaTime;
             if (transform.localScale.x > outerBubble.transform.localScale.x || transform.localScale.y > outerBubble.transform.localScale.y)
             {
                 Explode();
@@ -30,14 +43,14 @@ public class BurbujaOptions : MonoBehaviour
         }
         else
         {
-            if (transform.localScale.x < 0.5 || transform.localScale.y < 0.5)
+            if (transform.localScale.x < 50 || transform.localScale.y < 50)
             {
                 Explode();
             }
             // Decrementar el tamaño de la burbuja
             else
             {
-                transform.localScale -= new Vector3(inflateRate, inflateRate, 0) * Time.deltaTime;
+                transform.localScale -= new Vector3(inflateRate, inflateRate, inflateRate) * Time.deltaTime;
             }
         }
 
@@ -107,4 +120,3 @@ public class BurbujaOptions : MonoBehaviour
         Destroy(gameObject);
     }
 }
-
